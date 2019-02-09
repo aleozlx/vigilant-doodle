@@ -6,8 +6,6 @@ items:
   apiVersion: v1
   metadata:
     name: celery-repctl
-    labels:
-      name: celery-repctl
   spec:
     replicas: 1
     selector:
@@ -26,14 +24,10 @@ items:
           env:
           - name: KUBE_INSECURE
             value: 'true'
-        imagePullSecrets:
-        - name: regcred
 - kind: Service
   apiVersion: v1
   metadata:
-    name: celery-runner
-    labels:
-      name: celery-runner
+    name: celery-gateway
   spec:
     type: LoadBalancer
     ports:
