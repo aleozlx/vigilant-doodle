@@ -24,6 +24,7 @@ items:
           env:
           - name: KUBE_INSECURE
             value: 'true'
+        #imagePullPolicy: Always
 - kind: Service
   apiVersion: v1
   metadata:

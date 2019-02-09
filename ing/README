@@ -1,0 +1,4 @@
+kubectl create -f rbac-config.yaml
+helm init --upgrade --service-account tiller
+helm install --name nginx --set rbac.create=true stable/nginx-ingress
+
