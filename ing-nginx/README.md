@@ -1,7 +1,13 @@
+**Install Nginx Ingress Controller**
+
+Doc: https://kubernetes.github.io/ingress-nginx/
+
+```sh
 kubectl create -f rbac-config.yaml
 helm init --upgrade --service-account tiller
 helm install --name nginx --set rbac.create=true stable/nginx-ingress
 kubectl create -f celery-ingress.yml
+```
 
 **Reverse Proxy:** router -> ingress
 ```nginx
@@ -21,7 +27,7 @@ kubectl create -f celery-ingress.yml
     }
 ```
 
-OR **Without Ingress**
+OR **without Ingress**
 
 ```
 kubectl port-forward --address 0.0.0.0 service/celery-runner 5000:80
