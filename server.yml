@@ -1,0 +1,44 @@
+---
+kind: List
+apiVersion: v1
+items:
+- kind: ReplicationController
+  apiVersion: v1
+  metadata:
+    name: celery-repctl
+    labels:
+      name: celery-repctl
+  spec:
+    replicas: 1
+    selector:
+      name: celery-runner
+    template:
+      metadata:
+        labels:
+          name: celery-runner
+      spec:
+        containers:
+        - name: celery-runner
+          image: aleozlx/vigilant-doodle
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          env:
+          - name: KUBE_INSECURE
+            value: 'true'
+        imagePullSecrets:
+        - name: regcred
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: celery-runner
+    labels:
+      name: celery-runner
+  spec:
+    type: LoadBalancer
+    ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+    selector:
+      name: celery-runner
