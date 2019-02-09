@@ -21,3 +21,18 @@ kubectl create -f celery-ingress.yml
     }
 ```
 
+OR **Without Ingress**
+
+```
+kubectl port-forward --address 0.0.0.0 service/celery-runner 5000:80
+```
+```nginx
+    server {
+	    listen 80;
+	    server_name hotwings.3cv-research.com;
+	    location / {
+	        proxy_pass http://localhost:5000;
+        }
+    }
+```
+
