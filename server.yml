@@ -5,7 +5,7 @@ items:
 - kind: ReplicationController
   apiVersion: v1
   metadata:
-    name: celery-repctl
+    name: celery-gateway
   spec:
     replicas: 1
     selector:
