@@ -1,0 +1,75 @@
+---
+kind: List
+apiVersion: v1
+items:
+- kind: ReplicationController
+  apiVersion: v1
+  metadata:
+    name: redis-jobq
+  spec:
+    replicas: 1
+    selector:
+      name: redis-jobq
+    template:
+      metadata:
+        labels:
+          name: redis-jobq
+          app: celery-jobq
+      spec:
+        containers:
+        - name: redis-jobq
+          image: redis:5.0.3
+          ports:
+          - containerPort: 6379
+            protocol: TCP
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: redis-jobq
+  spec:
+    type: LoadBalancer
+    ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+    selector:
+      name: redis-jobq
+      app: celery-jobq
+
+- kind: ReplicationController
+  apiVersion: v1
+  metadata:
+    name: celery-worker
+  spec:
+    replicas: 2
+    selector:
+      name: celery-worker
+    template:
+      metadata:
+        labels:
+          name: celery-worker
+          app: celery-jobq
+      spec:
+        containers:
+        - name: celery-worker
+          image: aleozlx/vigilant-celery
+          ports:
+          - containerPort: 5672
+            protocol: TCP
+          command: ["celery"]
+          args: ["-A", "tasks", "worker", "--loglevel=info"]
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: celery-worker
+  spec:
+    type: LoadBalancer
+    ports:
+    - protocol: TCP
+      port: 5672
+      targetPort: 5672
+    selector:
+      name: celery-worker
+      app: celery-jobq
+
+
