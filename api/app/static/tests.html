@@ -2,13 +2,24 @@
   <html>
     <head>
       <link rel="stylesheet" href="node_modules/xterm/dist/xterm.css" />
+      <style>
+      body {
+        margin: 0px;
+      }
+      #terminal {
+        height: 100vh;
+      }
+      </style>
       <script src="node_modules/xterm/dist/xterm.js"></script>
+      <script src="node_modules/xterm/dist/addons/fit/fit.js"></script>
     </head>
     <body>
       <div id="terminal"></div>
       <script>
         var term = new Terminal();
+        Terminal.applyAddon(fit);
         term.open(document.getElementById('terminal'));
+        term.fit()
         term.write('Hello!');
       </script>
     </body>
